@@ -2,8 +2,9 @@ from scipy import sparse
 from scipy.sparse import csr_matrix
 from scipy.stats import uniform
 import numpy as np
-import SGD
-from SGD import vector
+import SVD
+from SGD import MF
+from SVD import vector
 def construct_sparse_matrix():
 
     data_file = open("combined_data_1.txt")
@@ -27,7 +28,7 @@ def construct_sparse_matrix():
             length = line.__len__() - 2
             movieID = line[:length].rstrip()
             movie_index = eval(movieID) - 1
-            if eval(movieID) == 35:
+            if eval(movieID) == 50:
                 check_example = 1
 
         else:
@@ -50,11 +51,17 @@ def construct_sparse_matrix():
     b = np.asarray(movie_column)
     c = np.asarray(data)
     c = c.astype('float')
-    SGD.sgd(a, b, c)
-
+#    SVD.sgd(a, b, c)
     matrix_data = sparse.coo_matrix((c, (a, b)))
-    print matrix_data
     matrix_data = sparse.csr_matrix(matrix_data)
+    R = matrix_data.toarray()
+
+    mf = MF(R, K=2, alpha=0.1, beta=0.01, iterations=3)
+    mf.train()
+    print mf.full_matrix()
+    matrix_data = sparse.coo_matrix((c, (a, b)))
+    matrix_data = sparse.csr_matrix(matrix_data)
+    R = matrix_data
     print "done"
 
 if __name__ == '__main__':
