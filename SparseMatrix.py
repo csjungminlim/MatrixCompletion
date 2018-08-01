@@ -5,6 +5,10 @@ import numpy as np
 import SVD
 from SGD import MF
 from SVD import vector
+import Neural_Network
+from Neural_Network import neural_network
+from Find_Neighbors import Find_Neighbors
+from MakePrediction import make_prediction
 def construct_sparse_matrix():
 
     data_file = open("combined_data_1.txt")
@@ -28,7 +32,7 @@ def construct_sparse_matrix():
             length = line.__len__() - 2
             movieID = line[:length].rstrip()
             movie_index = eval(movieID) - 1
-            if eval(movieID) == 50:
+            if eval(movieID) == 30:
                 check_example = 1
 
         else:
@@ -51,14 +55,18 @@ def construct_sparse_matrix():
     b = np.asarray(movie_column)
     c = np.asarray(data)
     c = c.astype('float')
+
 #    SVD.sgd(a, b, c)
     matrix_data = sparse.coo_matrix((c, (a, b)))
     matrix_data = sparse.csr_matrix(matrix_data)
     R = matrix_data.toarray()
-
-    mf = MF(R, K=2, alpha=0.1, beta=0.01, iterations=3)
+    mf = MF(R, K=2, alpha=0.02, beta=0.001, iterations=120)
     mf.train()
     print mf.full_matrix()
+    movie_aspect_vector = mf.get_movie_SVD()
+    item_aspect_vector = mf.get_item_SVD()
+    make_prediction(movie_aspect_vector, item_aspect_vector, user_index, mf)
+
     matrix_data = sparse.coo_matrix((c, (a, b)))
     matrix_data = sparse.csr_matrix(matrix_data)
     R = matrix_data
