@@ -1,14 +1,13 @@
+# -*- coding: utf-8 -*-
+
 from scipy import sparse
 from scipy.sparse import csr_matrix
 from scipy.stats import uniform
 import numpy as np
 import SVD
 from SGD import MF
-from SVD import vector
-import Neural_Network
-from Neural_Network import neural_network
 from Find_Neighbors import Find_Neighbors
-from MakePrediction import make_prediction
+
 def construct_sparse_matrix():
 
     data_file = open("combined_data_1.txt")
@@ -63,9 +62,10 @@ def construct_sparse_matrix():
     mf = MF(R, K=2, alpha=0.02, beta=0.001, iterations=120)
     mf.train()
     print mf.full_matrix()
+    neighbor_module = Find_Neighbors(matrix_data)
+    Find_Neighbors._compare_user_(neighbor_module)
     movie_aspect_vector = mf.get_movie_SVD()
     item_aspect_vector = mf.get_item_SVD()
-    make_prediction(movie_aspect_vector, item_aspect_vector, user_index, mf)
 
     matrix_data = sparse.coo_matrix((c, (a, b)))
     matrix_data = sparse.csr_matrix(matrix_data)
