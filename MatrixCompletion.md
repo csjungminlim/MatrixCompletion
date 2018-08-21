@@ -569,45 +569,6 @@ fig = plt.gcf()
 plt.show()
 ```
 
-​		
-
-### Probe Set 예상하기
-
-​	매트릭스를 학습시킨 뒤에 Netflix 에서 제공한 Probe Set 에 레이팅을 부여한다. MakePrediction.py 에 
-
-​	있는 make_prediction 함수에 생성된 매트릭스와 MF 클래스에서 생성된 Aspect Matrix 를 파라미터로 두고, 
-
-​	Probe 파일에서 분석될 영화와 사용자 ID 를 가지고 온다. 
-
-​	
-
-​	MF.get_rating 메소드를 실행시키면 해당 영화와 유저에 대한 평점이 계산된다.
-
-```Python
-def make_prediction(movie_matrix, user_matrix, user_index_dict, mf):
-
-    file1 = open("probe.txt")
-    for line in file1:
-        if not line:
-            continue
-        if ":" in line:
-            length = line.__len__() - 2
-            movieID = line[:length].rstrip()
-            print movieID
-            movieindex = eval(movieID) - 1
-
-        else:
-            userID = line.rstrip()
-            if userID not in user_index_dict:
-                continue
-            else:
-                id_index = user_index_dict[userID]
-
-                prediction = MF.get_rating(mf, movieindex, id_index)
-                print "The rating prediction for user " + userID + " for movie ID " + movieID + " is " + str(prediction)
-```
-
-
 
 ### 현재 진행중인 부분:
 
