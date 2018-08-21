@@ -629,4 +629,50 @@ def make_prediction(movie_matrix, user_matrix, user_index_dict, mf):
 
 
 
+### 레이팅 예상:
+
+
+
+​	MakePrediction.py 파이썬 파일에 있는 make_prediction() 함수는 넷플릭스에서 제공한 Probe 파일에 
+
+​	담긴 각 유저와 영화에대한 평점을 예상한다. SVD 로 학습된 알고리즘을 통하여 레이팅을 예상한다. 
+
+```python
+# -*- coding: utf-8 -*-
+import numpy as np
+# 기계학습으로 찾은 aspect vector 을 통해서 새로운 값들에대한 예상값을 구한다.
+# parameter: 영화의 aspect vector, 유저의 aspect vector
+# 두 백터의 dot product 를 구하면 결과값이 나온다
+
+from SGD import MF
+
+def make_prediction(user_index_dict, mf):
+
+    file1 = open("qualifying.txt")
+    for line in file1:
+        if not line:
+            continue
+        if ":" in line:
+            length = line.__len__() - 2
+            movieID = line[:length].rstrip()
+            movieindex = eval(movieID) - 1
+
+        else:
+            userID = line.rstrip()[0]
+            if userID not in user_index_dict:
+                continue
+            else:
+                id_index = user_index_dict[userID]
+                if movieindex < 49:
+
+                    prediction = MF.get_rating(mf, movieindex, id_index)
+                    userID = user_index_dict[userID]
+                    if prediction > 5:
+                        prediction = 5
+                    print "The rating prediction for user " + str(userID) + " for movie ID " + str(movieID) + " is " + str(prediction)
+
+                else:
+                    continue
+```
+
 ​	
