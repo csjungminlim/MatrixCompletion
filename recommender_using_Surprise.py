@@ -68,11 +68,9 @@ def get_accuracy(predictions):
 
 if __name__ == '__main__':
 
-    start_time = time.time()
-
     # 1. 데이터 파일 읽어오기
+    start_time = time.time()
     data_file = readFile("/Users/limjungmin/Netflix_Recommender/netflix-prize-data/combined_data_1.txt")
-
     run_time = time.time() - start_time
     print ( " Run time for readFile : %.4f (sec)" % (run_time) )
 
@@ -80,7 +78,6 @@ if __name__ == '__main__':
     # 2. Surprise  패키지에 활용할 수 있도록 데이터 전처리
     start_time = time.time()
     custom_data_file = makeCustomDataFile(data_file)
-
     run_time = time.time() - start_time
     print ( " Run time for makeCustomDataFile : %.4f (sec)" % (run_time) )
 
@@ -88,7 +85,6 @@ if __name__ == '__main__':
     # 3. 사용할 알고리즘(SVD)를 통한 학습 진행
     start_time = time.time()
     predictions = train_custom_data_file(custom_data_file, algo = SVD())
-
     run_time = time.time() - start_time
     print ( " Run time for train_custom_data_file : %.4f (sec)" % (run_time) )
 
